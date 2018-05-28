@@ -29,4 +29,10 @@ public class Result {
         System.out.println(player);
         System.out.println(dealer);
     }
+
+    public static Result clone(Result result) {
+        Player p = new Player(result.player);
+        Player d = new Player((result.dealer));
+        return new Result(result.winner, d, p);
+    }
 }

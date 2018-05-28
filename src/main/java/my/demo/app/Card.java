@@ -11,20 +11,20 @@ public class Card {
     final String suite;
 
     /* 2,3,4,5,6,7,8,9,10,J,Q,K,A */
-    final String valueAsString;
+    final String rank;
 
     /* 2,3,4,5,6,7,8,9,10,11 */
     final int value;
 
-    public Card(String suite, String valueAsString, int value) {
+    public Card(String suite, String rank, int value) {
         this.suite = suite;
-        this.valueAsString = valueAsString;
+        this.rank = rank;
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return "Card{" +suite + valueAsString +"}";
+        return "Card{" +suite + rank +"}";
     }
 
     @Override
@@ -35,13 +35,13 @@ public class Card {
         Card card = (Card) o;
 
         if (!suite.equals(card.suite)) return false;
-        return valueAsString.equals(card.valueAsString);
+        return rank.equals(card.rank);
     }
 
     @Override
     public int hashCode() {
         int result = suite.hashCode();
-        result = 31 * result + valueAsString.hashCode();
+        result = 31 * result + rank.hashCode();
         return result;
     }
 }

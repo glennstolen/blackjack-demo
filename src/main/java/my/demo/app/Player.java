@@ -13,6 +13,12 @@ public class Player {
         this.name = name;
     }
 
+    public Player(Player player) {
+        name = player.name;
+        drawnCards = new ArrayList<>();
+        drawnCards.addAll(player.drawnCards);
+    }
+
     public void addCard(Card card) {
         drawnCards.add(card);
     }
@@ -27,7 +33,7 @@ public class Player {
 
     public String getCards() {
         return drawnCards.stream()
-                .map(card -> card.suite +card.value)
+                .map(card -> card.suite +card.rank)
                 .collect(Collectors.joining(", "));
     }
 
