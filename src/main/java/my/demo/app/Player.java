@@ -35,4 +35,8 @@ public class Player {
     public String toString() {
         return name + ": " + getCards();
     }
+
+    public void clear() {
+        drawnCards = new ArrayList<>();
+    }
 }

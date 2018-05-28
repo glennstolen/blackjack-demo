@@ -2,33 +2,92 @@ package my.demo.app;
 
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.TreeGrid;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 @Title("Demo")
 public class DemoUi extends UI {
 
-    private VerticalLayout content;
+    private VerticalLayout layout;
     private TreeGrid<Result> list;
+
+    public static Table table = new Table();
 
     @Override
     protected void init(VaadinRequest request) {
         list = new TreeGrid<>(Result.class);
         list.setItems(ResultList.allResults);
-        content = new VerticalLayout(
-                new Button("Play game", event -> {
-                    Table table = new Table();
-                    Result result = table.playGame();
 
+        Label scorePlayer = new Label("");
+        Label scoreDealer = new Label("");
+        layout = new VerticalLayout(
+                new Button("New game", event -> {
+                    table.getCardDeck().shuffle();
+                    table.getPlayer().clear();
+                    table.getDealer().clear();
+
+                    Card card1 = table.getCardDeck().draw();
+                    table.getPlayer().addCard(card1);
+
+                    Card card2 = table.getCardDeck().draw();
+                    table.getDealer().addCard(card2);
+
+                    Card card3 = table.getCardDeck().draw();
+                    table.getPlayer().addCard(card3);
+
+                    Card card4 = table.getCardDeck().draw();
+                    table.getDealer().addCard(card4);
+
+                    scorePlayer.setValue(Integer.toString(table.getPlayer().score()));
+                    scoreDealer.setValue(Integer.toString(table.getDealer().score()));
+
+                    Result result = table.getResult();
+                    if (result !=null) {
+                        ResultList.allResults.add(result);
+                        list.setItems(ResultList.allResults);
+                    }
+
+                    /*
+                    Result result = table.playGame();
                     ResultList.allResults.add(result);
                     list.setItems(ResultList.allResults);
+                    */
                 })
+
         );
-        content.addComponentsAndExpand(list);
-        content.setSizeFull();
-        setContent(content);
+
+        HorizontalLayout buttons = new HorizontalLayout(
+                new VerticalLayout(
+                        new Button("Player - Draw", event -> {
+                            Card card = table.getCardDeck().draw();
+                            table.getPlayer().addCard(card);
+                            scorePlayer.setValue(Integer.toString(table.getPlayer().score()));
+
+                            Result result = table.getResult();
+                            if (result !=null) {
+                                ResultList.allResults.add(result);
+                                list.setItems(ResultList.allResults);
+                            }
+
+                        }),
+                        scorePlayer),
+                new VerticalLayout(
+                        new Button("Dealer - Draw", event -> {
+                            Card card = table.getCardDeck().draw();
+                            table.getDealer().addCard(card);
+                            scoreDealer.setValue(Integer.toString(table.getDealer().score()));
+
+                            Result result = table.getResult();
+                            if (result !=null) {
+                                ResultList.allResults.add(result);
+                                list.setItems(ResultList.allResults);
+                            }
+                        }),
+                        scoreDealer));
+
+        layout.addComponent(buttons);
+        layout.addComponentsAndExpand(list);
+
+        setContent(layout);
 
     }
 

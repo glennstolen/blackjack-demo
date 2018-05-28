@@ -13,11 +13,62 @@ public class Table {
         this.deck = new CardDeck();
     }
 
-    public Table(CardDeck deck) {
+    Table(CardDeck deck) {
        this.deck = deck;
     }
 
 
+    CardDeck getCardDeck() {
+        return this.deck;
+    }
+
+    Player getPlayer() {
+        return player;
+    }
+
+    Player getDealer() {
+        return dealer;
+    }
+
+    Result getResult() {
+        /* player wins when both players starts with Blackjack */
+        if (player.score() == 21) {
+            return new Result(player.getName(),dealer,player);
+        }
+        if (dealer.score() == 21) {
+            return new Result(dealer.getName(),dealer,player);
+        }
+
+        /* dealer wins when both players starts with 22*/
+        if (player.score() == 22 && dealer.score() == 22) {
+            return new Result(dealer.getName(), dealer, player);
+        }
+
+        /* sam has lost the game if their total is higher than 21 */
+        if (player.score() > 21) {
+            return new Result(dealer.getName(),dealer,player);
+        }
+
+        /* the dealer has lost the game if their total is higher than 21 */
+        if (dealer.score()>21) {
+            return new Result(player.getName(),dealer,player);
+        }
+
+        if (player.score()>=17 && dealer.score()>player.score()) {
+        /* determine which player wins the game (highest score wins) */
+            if (player.score() > dealer.score()) {
+                return new Result(player.getName(), dealer, player);
+            } else {
+                return new Result(dealer.getName(), dealer, player);
+            }
+        } else {
+            return null; // No winner so fare
+        }
+    }
+
+    /*
+    Used by SimpleMain
+     */
     public Result playGame() {
         player.addCard(deck.draw());
         dealer.addCard(deck.draw());
@@ -27,6 +78,9 @@ public class Table {
         /* sam wins when both players starts with Blackjack */
         if (player.score() == 21) {
             return new Result(player.getName(),dealer,player);
+        }
+        if (dealer.score() == 21) {
+            return new Result(dealer.getName(),dealer,player);
         }
 
         /* dealer wins when both players starts with 22*/
