@@ -1,0 +1,30 @@
+{
+  "cards" : [
+    { "suite": "A", "rank": "K", "value": 10},
+    { "suite": "A", "rank": "Q", "value": 10},
+    { "suite": "A", "rank": "J", "value": 10},
+    { "suite": "A", "rank": "A", "value": 11},
+    { "suite": "A", "rank": "10", "value": 10},
+	{ "suite": "A", "rank": "9", "value": 9},
+	{ "suite": "A", "rank": "8", "value": 8},
+	{ "suite": "A", "rank": "7", "value": 7},
+	{ "suite": "A", "rank": "6", "value": 6},
+	{ "suite": "A", "rank": "5", "value": 5},
+	{ "suite": "A", "rank": "4", "value": 4},
+	{ "suite": "A", "rank": "3", "value": 3},
+	{ "suite": "A", "rank": "2", "value": 2},
+    { "suite": "H", "rank": "K", "value": 10},
+    { "suite": "H", "rank": "Q", "value": 10},
+    { "suite": "H", "rank": "J", "value": 10},
+    { "suite": "H", "rank": "A", "value": 11},
+    { "suite": "H", "rank": "10", "value": 10},
+    { "suite": "H", "rank": "9", "value": 9},
+    { "suite": "H", "rank": "8", "value": 8},
+    { "suite": "H", "rank": "7", "value": 7},
+    { "suite": "H", "rank": "6", "value": 6},
+    { "suite": "H", "rank": "5", "value": 5},
+	{ "suite": "H", "rank": "4", "value": 4},
+	{ "suite": "H", "rank": "3", "value": 3},
+	{ "suite": "H", "rank": "2", "value": 2}
+  ]
+}
