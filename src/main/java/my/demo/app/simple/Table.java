@@ -16,7 +16,7 @@ public class Table {
 
     private CardDeck deck;
 
-    Table() {
+    public Table() {
         this.deck = new CardDeck();
     }
 
@@ -24,7 +24,7 @@ public class Table {
        this.deck = deck;
     }
 
-    Result playGame() {
+    public Result playGame() {
 
         Player player = new Player("sam");
 

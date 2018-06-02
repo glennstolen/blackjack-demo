@@ -1,4 +1,4 @@
-package my.demo.app;
+package my.demo.app.interactive;
 
 import com.vaadin.server.VaadinServlet;
 import org.apache.log4j.Logger;
@@ -36,7 +36,6 @@ public class Main {
             contextHandler.setInitParameter("productionMode", "true");
 
             server.setHandler(contextHandler);
-
 
             server.start();
             server.join();

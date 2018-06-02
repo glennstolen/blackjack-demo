@@ -1,5 +1,6 @@
 package my.demo.app;
 
+import my.demo.app.simple.Table;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.TestCase.assertNotNull;

@@ -32,7 +32,7 @@ public class Player {
         return name;
     }
 
-    public String getCards() {
+    public String getDrawnCards() {
         return drawnCards.stream()
                 .map(Card::toString)
                 .collect(Collectors.joining(", "));
@@ -40,7 +40,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return name + ": " + getCards();
+        return name + ": " + getDrawnCards();
     }
 
     public void clear() {

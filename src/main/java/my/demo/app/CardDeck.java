@@ -24,7 +24,7 @@ public class CardDeck {
     }
 
 
-    void shuffle() {
+    public void shuffle() {
         Collections.shuffle(cards);
         deck = new ArrayDeque(cards);
     }

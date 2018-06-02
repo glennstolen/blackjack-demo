@@ -17,11 +17,11 @@ public class Result {
     }
 
     public String getDealerCards() {
-        return dealer.getCards();
+        return dealer.getDrawnCards();
     }
 
     public String getPlayerCards() {
-        return player.getCards();
+        return player.getDrawnCards();
     }
 
     public void printResult() {
