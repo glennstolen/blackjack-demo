@@ -1,30 +1,65 @@
 package my.demo.app;
 
+import java.util.Arrays;
+
 public class Card {
 
-    /**
-     * C - Clubes
-     * D - Diamonds
-     * H - Hearts
-     * S - Spades
-     */
-    final String suite;
+    public enum Suite {
+        H, D, C, S
+    }
 
-    /* 2,3,4,5,6,7,8,9,10,J,Q,K,A */
-    final String rank;
+    public enum CardValue {
+        TWO("2",2),
+        THREE("3",3),
+        FOUR("4",4),
+        FIVE("5",5),
+        SIX("6",6),
+        SEVEN("7",7),
+        EIGHT("8",8),
+        NINE("9", 9),
+        TEN("10",10),
+        JACK("J",10),
+        QUEEN("Q",10),
+        KING("K",10),
+        ACE("A",11);
 
-    /* 2,3,4,5,6,7,8,9,10,11 */
-    final int value;
+        private String rank;
+        private int gameValue;
 
-    public Card(String suite, String rank, int value) {
+        CardValue(String rank, int gameValue) {
+            this.rank = rank;
+            this.gameValue = gameValue;
+        }
+
+        public static CardValue getCardValue(String rank) {
+
+            return Arrays.stream(values())
+                    .filter(val -> val.rank.equals(rank))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Not possible to create CardValue with: rank " + rank));
+        }
+
+        int getGameValue() {
+            return gameValue;
+        }
+
+        public String getRank() {
+            return rank;
+        }
+    }
+
+    final Suite suite;
+
+    final CardValue value;
+
+    public Card(Suite suite, CardValue value) {
         this.suite = suite;
-        this.rank = rank;
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return "Card{" +suite + rank +"}";
+        return suite + value.rank ;
     }
 
     @Override
@@ -35,13 +70,13 @@ public class Card {
         Card card = (Card) o;
 
         if (!suite.equals(card.suite)) return false;
-        return rank.equals(card.rank);
+        return value.rank.equals(card.value.rank);
     }
 
     @Override
     public int hashCode() {
         int result = suite.hashCode();
-        result = 31 * result + rank.hashCode();
+        result = 31 * result + value.rank.hashCode();
         return result;
     }
 }

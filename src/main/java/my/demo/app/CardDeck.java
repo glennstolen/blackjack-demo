@@ -4,51 +4,15 @@ import java.util.*;
 
 public class CardDeck {
 
-    private enum Suite {
-        H, D, C, S
-    }
-
-    private enum CardValue {
-        TWO("2",2),
-        THREE("3",3),
-        FOUR("4",4),
-        FIVE("5",5),
-        SIX("6",6),
-        SEVEN("7",7),
-        EIGHT("8",8),
-        NINE("9", 9),
-        TEN("10",10),
-        JACK("J",10),
-        QUEEN("Q",10),
-        KING("K",10),
-        ACE("A",11);
-
-        private String rank;
-        private int value;
-
-        CardValue(String rank, int value) {
-            this.rank = rank;
-            this.value = value;
-        }
-
-        int getValue() {
-            return value;
-        }
-
-        public String getRank() {
-            return rank;
-        }
-    }
-
     private List<Card> cards;
 
     private ArrayDeque<Card> deck;
 
     CardDeck() {
         cards = new ArrayList<>();
-        for (Suite suite : Suite.values()) {
-            for (CardValue cardValue : CardValue.values()) {
-                cards.add(new Card(suite.name(), cardValue.getRank(), cardValue.getValue()));
+        for (Card.Suite suite : Card.Suite.values()) {
+            for (Card.CardValue cardValue : Card.CardValue.values()) {
+                cards.add(new Card(suite, cardValue));
             }
         }
         shuffle();

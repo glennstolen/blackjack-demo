@@ -10,7 +10,7 @@ class PlayerTest {
     void test_draw_card() {
         Player player = new Player("test");
 
-        player.addCard(new Card("S","A",11));
+        player.addCard(new Card(Card.Suite.valueOf("S"),Card.CardValue.getCardValue("A")));
 
         assertEquals(11, player.score());
     }
@@ -22,8 +22,8 @@ class PlayerTest {
         Player player = new Player("test");
 
         for (int i = 0; i < 10; i++) {
-            Card card = new Card("card"+i, Integer.toString(i), i);
-            expectedSum += card.value;
+            Card card = new Card(Card.Suite.valueOf("S"), Card.CardValue.getCardValue("5"));
+            expectedSum += card.value.getGameValue();
             player.addCard(card);
         }
         assertEquals(expectedSum, player.score());

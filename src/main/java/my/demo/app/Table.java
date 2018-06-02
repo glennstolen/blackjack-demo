@@ -4,6 +4,7 @@ public class Table {
 
 
     private Player dealer = new Player("dealer");
+
     private Player player = new Player("sam");
 
     private CardDeck deck;

@@ -30,10 +30,10 @@ public class ResourceUtils {
             Iterator<JSONObject> iterator = cardList.iterator();
             while (iterator.hasNext()) {
                 JSONObject card = iterator.next();
-                String name = (String) card.get("suite");
+                String suite = (String) card.get("suite");
                 String rank = (String) card.get("rank");
-                Long value = (Long)card.get("value");
-                cards.add(new Card(name, rank, value.intValue()));
+                //Long value = (Long)card.get("value");
+                cards.add(new Card(Card.Suite.valueOf(suite), Card.CardValue.getCardValue(rank)));
             }
 
             return cards;
@@ -59,8 +59,9 @@ public class ResourceUtils {
             List<Card> cards = new ArrayList<>();
             for (String item : items) {
                 int length = item.length();
-                String rank = getRank(item, length);
-                cards.add(new Card(item.substring(0,1), rank, getValueOfCard(rank)));
+                String suite = item.substring(0,1);
+                String rank = item.substring(1, length);
+                cards.add(new Card(Card.Suite.valueOf(suite), Card.CardValue.getCardValue(rank)));
             }
 
            return cards;
@@ -70,29 +71,7 @@ public class ResourceUtils {
         }
     }
 
-    private static int getValueOfCard(String rank) {
-        switch (rank) {
-            case "J":
-            case "Q":
-            case "K": return 10;
-            case "A": return 11;
-            default: return Integer.parseInt(rank);
-        }
-    }
 
-    private static String getRank(String item, int length) {
-        return item.substring(1, length);
-    }
-
-    /*
-    public static String getValueOfCard(int value) {
-        switch (value) {
-            case 10:
-            case 11:
-        }
-
-    }
-*/
     private static Collection<String> tokenizer(String line) {
         return Collections.list(new StringTokenizer(line, ","))
                 .stream()

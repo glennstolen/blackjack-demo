@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class Player {
     private String name;
 
-    private List<Card> drawnCards = new ArrayList<>();
+    private List<Card> drawnCards;
 
     public Player(String name) {
         this.name = name;
@@ -24,7 +24,7 @@ public class Player {
     }
 
     public int score() {
-        return drawnCards.stream().mapToInt(card -> card.value).sum();
+        return drawnCards.stream().mapToInt(card -> card.value.getGameValue()).sum();
     }
 
     public String getName() {
@@ -33,7 +33,7 @@ public class Player {
 
     public String getCards() {
         return drawnCards.stream()
-                .map(card -> card.suite +card.rank)
+                .map(Card::toString)
                 .collect(Collectors.joining(", "));
     }
 
