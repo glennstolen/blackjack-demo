@@ -11,6 +11,7 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
+        drawnCards = new ArrayList<>();
     }
 
     public Player(Player player) {

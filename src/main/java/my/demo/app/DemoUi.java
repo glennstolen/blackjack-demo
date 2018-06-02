@@ -23,23 +23,24 @@ public class DemoUi extends UI {
         HorizontalLayout buttons1 = new HorizontalLayout(
                 new VerticalLayout(
                         new Button("New game", event -> {
+                            table.addPlayer(new Player("sam"));
                             table.getCardDeck().shuffle();
-                            table.getPlayer().clear();
+                            table.getPlayers().iterator().next().clear();
                             table.getDealer().clear();
 
                             Card card1 = table.getCardDeck().draw();
-                            table.getPlayer().addCard(card1);
+                            table.getPlayers().iterator().next().addCard(card1);
 
                             Card card2 = table.getCardDeck().draw();
                             table.getDealer().addCard(card2);
 
                             Card card3 = table.getCardDeck().draw();
-                            table.getPlayer().addCard(card3);
+                            table.getPlayers().iterator().next().addCard(card3);
 
                             Card card4 = table.getCardDeck().draw();
                             table.getDealer().addCard(card4);
 
-                            scorePlayer.setValue(Integer.toString(table.getPlayer().score()));
+                            scorePlayer.setValue(Integer.toString(table.getPlayers().iterator().next().score()));
                             scoreDealer.setValue(Integer.toString(table.getDealer().score()));
 
                             Result result = table.getResult();
@@ -55,8 +56,8 @@ public class DemoUi extends UI {
                 new VerticalLayout(
                         new Button("Player - Draw", event -> {
                             Card card = table.getCardDeck().draw();
-                            table.getPlayer().addCard(card);
-                            scorePlayer.setValue(Integer.toString(table.getPlayer().score()));
+                            table.getPlayers().iterator().next().addCard(card);
+                            scorePlayer.setValue(Integer.toString(table.getPlayers().iterator().next().score()));
 
                             Result result = table.getResult();
                             if (result !=null) {

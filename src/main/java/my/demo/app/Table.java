@@ -1,11 +1,14 @@
 package my.demo.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Table {
 
 
     private Player dealer = new Player("dealer");
 
-    private Player player = new Player("sam");
+    private List<Player> players = new ArrayList<>();
 
     private CardDeck deck;
 
@@ -18,49 +21,52 @@ public class Table {
        this.deck = deck;
     }
 
-
     CardDeck getCardDeck() {
         return this.deck;
-    }
-
-    Player getPlayer() {
-        return player;
     }
 
     Player getDealer() {
         return dealer;
     }
 
+    boolean addPlayer(Player player) {
+        return this.players.add(player);
+    }
+
+    List<Player> getPlayers() {
+        return players;
+    }
+
     Result getResult() {
         /* player wins when both players starts with Blackjack */
-        if (player.score() == 21) {
-            return new Result(player.getName(),dealer,player);
+        if (players.iterator().next().score() == 21) {
+            return new Result(players.iterator().next().getName(),dealer,players.iterator().next());
         }
         if (dealer.score() == 21) {
-            return new Result(dealer.getName(),dealer,player);
+            return new Result(dealer.getName(),dealer,players.iterator().next());
         }
 
         /* dealer wins when both players starts with 22*/
-        if (player.score() == 22 && dealer.score() == 22) {
-            return new Result(dealer.getName(), dealer, player);
+        if (players.iterator().next().score() == 22 && dealer.score() == 22) {
+            return new Result(dealer.getName(), dealer, players.iterator().next());
         }
 
         /* sam has lost the game if their total is higher than 21 */
-        if (player.score() > 21) {
-            return new Result(dealer.getName(),dealer,player);
+        if (players.iterator().next().score() > 21) {
+            return new Result(dealer.getName(),dealer,players.iterator().next());
         }
 
         /* the dealer has lost the game if their total is higher than 21 */
         if (dealer.score()>21) {
-            return new Result(player.getName(),dealer,player);
+            return new Result(players.iterator().next().getName(),dealer,players.iterator().next());
         }
 
-        if (player.score()>=17 && dealer.score()>player.score()) {
+        if (players.iterator().next().score()>=17 && dealer.score()>players.iterator().next().score()) {
         /* determine which player wins the game (highest score wins) */
-            if (player.score() > dealer.score()) {
-                return new Result(player.getName(), dealer, player);
+            if (players.iterator().next().score() > dealer.score()) {
+                return new Result(players.iterator().next().getName(), dealer, players.iterator().next());
             } else {
-                return new Result(dealer.getName(), dealer, player);
+                return new Result(dealer.getName(), dealer, players.iterator().next());
             }
         } else {
             return null; // No winner so fare
@@ -71,6 +77,10 @@ public class Table {
     Used by SimpleMain
      */
     public Result playGame() {
+
+        Player player = new Player("sam");
+        addPlayer(player);
+
         player.addCard(deck.draw());
         dealer.addCard(deck.draw());
         player.addCard(deck.draw());
@@ -100,7 +110,7 @@ public class Table {
         }
 
         /* the dealer must stop drawing cards when their total is higher than sam */
-        while (dealer.score() < player.score()) {
+        while (dealer.score() <= player.score()) {
             dealer.addCard(deck.draw());
         }
 
