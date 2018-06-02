@@ -9,6 +9,8 @@ public class Player {
     private List<Card> drawnCards;
     private boolean hold;
 
+    private Result result;
+
     public Player(String name) {
         this.name = name;
         drawnCards = new ArrayList<>();
@@ -20,16 +22,32 @@ public class Player {
         drawnCards.addAll(player.drawnCards);
     }
 
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
     public void addCard(Card card) {
         drawnCards.add(card);
     }
 
-    public int score() {
-        return drawnCards.stream().mapToInt(card -> card.value.getGameValue()).sum();
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getScore() {
+        return Integer.toString(score());
+    }
+
+    public String getWinner(){
+        if (this.result != null) {
+            return this.result.getWinner();
+        } else {
+            return "-";
+        }
+    }
+
+    public int score() {
+        return drawnCards.stream().mapToInt(card -> card.value.getGameValue()).sum();
     }
 
     public String getDrawnCards() {
@@ -45,6 +63,7 @@ public class Player {
 
     public void clear() {
         drawnCards = new ArrayList<>();
+        result = null;
     }
 
     public void hold() {

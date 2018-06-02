@@ -40,36 +40,52 @@ public class Table {
         return players;
     }
 
-    public Result getResult() {
+    public Player getPlayer(String name) {
+        return players.stream()
+                .filter(p -> p.getName().equals(name))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Found more than one"));
+    }
+
+    public void updateResult() {
+        for (Player player : getPlayers()) {
+            Result result = getResult(player);
+            if (result!=null) {
+                player.setResult(result);
+            }
+        }
+    }
+
+    Result getResult(Player player) {
         /* player wins when both players starts with Blackjack */
-        if (players.iterator().next().score() == 21) {
-            return new Result(players.iterator().next().getName(),dealer,players.iterator().next());
+        if (player.score() == 21) {
+            return new Result(player.getName(),dealer,player);
         }
         if (dealer.score() == 21) {
-            return new Result(dealer.getName(),dealer,players.iterator().next());
+            return new Result(dealer.getName(),dealer,player);
         }
 
         /* dealer wins when both players starts with 22*/
-        if (players.iterator().next().score() == 22 && dealer.score() == 22) {
-            return new Result(dealer.getName(), dealer, players.iterator().next());
+        if (player.score() == 22 && dealer.score() == 22) {
+            return new Result(dealer.getName(), dealer, player);
         }
 
-        /* sam has lost the game if their total is higher than 21 */
-        if (players.iterator().next().score() > 21) {
-            return new Result(dealer.getName(),dealer,players.iterator().next());
+
+        if (player.score() > 21) {
+            return new Result(dealer.getName(),dealer,player);
         }
 
         /* the dealer has lost the game if their total is higher than 21 */
         if (dealer.score()>21) {
-            return new Result(players.iterator().next().getName(),dealer,players.iterator().next());
+            return new Result(player.getName(),dealer,player);
         }
 
-        if (players.iterator().next().score()>=17 && dealer.score()>players.iterator().next().score()) {
+        if (player.score()>=17 && dealer.score()>player.score()) {
         /* determine which player wins the game (highest score wins) */
-            if (players.iterator().next().score() > dealer.score()) {
-                return new Result(players.iterator().next().getName(), dealer, players.iterator().next());
+            if (player.score() > dealer.score()) {
+                return new Result(player.getName(), dealer, player);
             } else {
-                return new Result(dealer.getName(), dealer, players.iterator().next());
+                return new Result(dealer.getName(), dealer, player);
             }
         } else {
             return null; // No winner so fare

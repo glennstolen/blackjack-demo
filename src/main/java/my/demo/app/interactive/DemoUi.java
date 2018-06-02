@@ -3,93 +3,101 @@ package my.demo.app.interactive;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import my.demo.app.*;
 
 @Title("Demo")
 public class DemoUi extends UI {
 
     private VerticalLayout layout;
-    private TreeGrid<Result> list;
+    private TreeGrid<Result> resultList;
+    private TreeGrid<Player> playerList;
 
-    public static Table table = new Table();
+    private static Table table = new Table();
 
-    private Label playerScoreLabel = new Label("");
     private Label dealerScoreLabel = new Label("");
-
 
     private Button dealerButton = new Button("Dealer - Draw", event -> {
         Card card = table.getCardDeck().draw();
         table.getDealer().addCard(card);
         setDealerScoreLabel();
 
-        checkResult();
+        table.updateResult();
+        playerList.setItems(table.getPlayers());
     });
 
-    private Button playerDrawButton = new Button("Player - Draw", event -> {
-        Card card = table.getCardDeck().draw();
-        table.getPlayers().iterator().next().addCard(card);
-        setPlayerScoreLabel();
-        checkResult();
+    private TextField newPlayerName = new TextField();
+
+    private Button addPlayerButton = new Button("Add player", event -> {
+        Player player = new Player(newPlayerName.getValue());
+        table.addPlayer(player);
+        playerList.setItems(table.getPlayers());
     });
 
-    private Button playerHoldButton = new Button("Player - Hold", event -> {
-
-        table.getPlayers().iterator().next().hold();
-        playerDrawButton.setEnabled(false);
-        dealerButton.setEnabled(true);
-        dealerButton.focus();
-    });
 
     private Button newGameButton = new Button("New game", event -> {
-        table.addPlayer(new Player("sam"));
         table.getCardDeck().shuffle();
-        table.getPlayers().iterator().next().clear();
+
         table.getDealer().clear();
+        table.getPlayers().forEach(Player::clear);
 
         drawInitialCards();
 
-        if (table.getPlayers().iterator().next().score()<21) {
-            playerDrawButton.setEnabled(true);
-            playerHoldButton.setEnabled(true);
-            playerDrawButton.focus();
-            dealerButton.setEnabled(false);
-        }
+        addPlayerButton.setEnabled(false);
 
-        setPlayerScoreLabel();
         setDealerScoreLabel();
-
-        checkResult();
+        table.updateResult();
+        playerList.setItems(table.getPlayers());
     });
 
     @Override
     protected void init(VaadinRequest request) {
-        list = new TreeGrid<>(Result.class);
-        list.setItems(ResultList.allResults);
+        resultList = new TreeGrid<>(Result.class);
+        resultList.setItems(ResultList.allResults);
+
+        playerList = new TreeGrid<>(Player.class);
+        playerList.setWidth("100%");
+
+        playerList.addColumn(person -> "Draw",
+                new ButtonRenderer(clickEvent -> {
+                    Card card = table.getCardDeck().draw();
+                    ((Player) clickEvent.getItem()).addCard(card);
+                    table.updateResult();
+                    playerList.setItems(table.getPlayers());
+                }));
+
+        playerList.addColumn(person -> "Hold",
+                new ButtonRenderer(clickEvent -> {
+                    dealerButton.setEnabled(true);
+                    dealerButton.focus();
+
+                    ((Player) clickEvent.getItem()).hold();
+                    playerList.setItems(table.getPlayers());
+                }));
 
         dealerButton.setEnabled(false);
-        playerDrawButton.setEnabled(false);
-        playerHoldButton.setEnabled(false);
 
         layout = new VerticalLayout();
 
-        HorizontalLayout buttons1 = new HorizontalLayout(
-                new VerticalLayout(
-                        newGameButton
-                )
+        HorizontalLayout addPlayerArea = new HorizontalLayout(
+                newPlayerName,
+                addPlayerButton
         );
 
-        HorizontalLayout buttons2 = new HorizontalLayout(
-                new VerticalLayout(
-                        playerDrawButton,
-                        playerHoldButton,
-                        playerScoreLabel),
-                new VerticalLayout(
-                        dealerButton,
-                        dealerScoreLabel));
+        HorizontalLayout newGameArea = new HorizontalLayout(
+                newGameButton
+        );
 
-        layout.addComponent(buttons1);
-        layout.addComponent(buttons2);
-        layout.addComponentsAndExpand(list);
+        HorizontalLayout dealerArea = new HorizontalLayout(
+                        dealerButton,
+                        dealerScoreLabel);
+
+        layout.addComponent(addPlayerArea);
+        layout.addComponentsAndExpand(playerList);
+
+        layout.addComponent(newGameArea);
+        layout.addComponent(dealerArea);
+        layout.addComponentsAndExpand(resultList);
 
         setContent(layout);
 
@@ -99,39 +107,18 @@ public class DemoUi extends UI {
         dealerScoreLabel.setValue(table.getDealer().getDrawnCards() + " (" + Integer.toString(table.getDealer().score()) + ")");
     }
 
-    private void setPlayerScoreLabel() {
-        playerScoreLabel.setValue(table.getPlayers().iterator().next().getDrawnCards() + " ("+ Integer.toString(table.getPlayers().iterator().next().score())+")");
-    }
-
     private void drawInitialCards() {
-        Card card1 = table.getCardDeck().draw();
-        table.getPlayers().iterator().next().addCard(card1);
-
-        Card card2 = table.getCardDeck().draw();
-        table.getDealer().addCard(card2);
-
-        Card card3 = table.getCardDeck().draw();
-        table.getPlayers().iterator().next().addCard(card3);
-
-        Card card4 = table.getCardDeck().draw();
-        table.getDealer().addCard(card4);
-    }
-
-    private void checkResult() {
-        Result result = table.getResult();
-        if (result !=null) { // we have a winner
-            ResultList.allResults.add(Result.clone(result));
-            list.setItems(ResultList.allResults);
-            dealerScoreLabel.setValue("");
-            playerScoreLabel.setValue("");
-            dealerButton.setEnabled(false);
-            playerDrawButton.setEnabled(false);
-            playerHoldButton.setEnabled(false);
-            newGameButton.setEnabled(true);
-            newGameButton.focus();
-        } else {
-            newGameButton.setEnabled(false);
+        for (Player p : table.getPlayers()) {
+            p.addCard(table.getCardDeck().draw());
         }
+
+        table.getDealer().addCard(table.getCardDeck().draw());
+
+        for (Player p : table.getPlayers()) {
+            p.addCard(table.getCardDeck().draw());
+        }
+
+        table.getDealer().addCard(table.getCardDeck().draw());
     }
 
 }
