@@ -8,7 +8,7 @@ public class CardDeck {
 
     private ArrayDeque<Card> deck;
 
-    CardDeck() {
+    public CardDeck() {
         cards = new ArrayList<>();
         for (Card.Suite suite : Card.Suite.values()) {
             for (Card.CardValue cardValue : Card.CardValue.values()) {
@@ -18,7 +18,7 @@ public class CardDeck {
         shuffle();
     }
 
-    CardDeck(List<Card> cards) {
+    public CardDeck(List<Card> cards) {
         this.cards = cards;
         shuffle();
     }
@@ -29,7 +29,7 @@ public class CardDeck {
         deck = new ArrayDeque(cards);
     }
 
-    Card draw() {
+    public Card draw() {
         return deck.pop();
     }
 

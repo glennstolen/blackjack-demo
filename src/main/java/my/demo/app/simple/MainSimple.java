@@ -1,5 +1,8 @@
-package my.demo.app;
+package my.demo.app.simple;
 
+import my.demo.app.Card;
+import my.demo.app.CardDeck;
+import my.demo.app.Result;
 import my.demo.utils.ResourceUtils;
 import org.apache.log4j.Logger;
 
