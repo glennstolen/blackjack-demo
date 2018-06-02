@@ -16,12 +16,6 @@ public class DemoUi extends UI {
     private Label playerScoreLabel = new Label("");
     private Label dealerScoreLabel = new Label("");
 
-    private Button playerButton = new Button("Player - Draw", event -> {
-        Card card = table.getCardDeck().draw();
-        table.getPlayers().iterator().next().addCard(card);
-        setPlayerScoreLabel();
-        checkResult();
-    });
 
     private Button dealerButton = new Button("Dealer - Draw", event -> {
         Card card = table.getCardDeck().draw();
@@ -31,6 +25,21 @@ public class DemoUi extends UI {
         checkResult();
     });
 
+    private Button playerDrawButton = new Button("Player - Draw", event -> {
+        Card card = table.getCardDeck().draw();
+        table.getPlayers().iterator().next().addCard(card);
+        setPlayerScoreLabel();
+        checkResult();
+    });
+
+    private Button playerHoldButton = new Button("Player - Hold", event -> {
+
+        table.getPlayers().iterator().next().hold();
+        playerDrawButton.setEnabled(false);
+        dealerButton.setEnabled(true);
+        dealerButton.focus();
+    });
+
     private Button newGameButton = new Button("New game", event -> {
         table.addPlayer(new Player("sam"));
         table.getCardDeck().shuffle();
@@ -38,8 +47,13 @@ public class DemoUi extends UI {
         table.getDealer().clear();
 
         drawInitialCards();
-        dealerButton.setEnabled(true);
-        playerButton.setEnabled(true);
+
+        if (table.getPlayers().iterator().next().score()<21) {
+            playerDrawButton.setEnabled(true);
+            playerHoldButton.setEnabled(true);
+            playerDrawButton.focus();
+            dealerButton.setEnabled(false);
+        }
 
         setPlayerScoreLabel();
         setDealerScoreLabel();
@@ -53,7 +67,8 @@ public class DemoUi extends UI {
         list.setItems(ResultList.allResults);
 
         dealerButton.setEnabled(false);
-        playerButton.setEnabled(false);
+        playerDrawButton.setEnabled(false);
+        playerHoldButton.setEnabled(false);
 
         layout = new VerticalLayout();
 
@@ -65,7 +80,8 @@ public class DemoUi extends UI {
 
         HorizontalLayout buttons2 = new HorizontalLayout(
                 new VerticalLayout(
-                        playerButton,
+                        playerDrawButton,
+                        playerHoldButton,
                         playerScoreLabel),
                 new VerticalLayout(
                         dealerButton,
@@ -109,13 +125,12 @@ public class DemoUi extends UI {
             dealerScoreLabel.setValue("");
             playerScoreLabel.setValue("");
             dealerButton.setEnabled(false);
-            playerButton.setEnabled(false);
+            playerDrawButton.setEnabled(false);
+            playerHoldButton.setEnabled(false);
             newGameButton.setEnabled(true);
             newGameButton.focus();
         } else {
             newGameButton.setEnabled(false);
-            dealerButton.setEnabled(true);
-            playerButton.setEnabled(true);
         }
     }
 

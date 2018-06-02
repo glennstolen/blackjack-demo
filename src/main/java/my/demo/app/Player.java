@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 public class Player {
     private String name;
-
     private List<Card> drawnCards;
+    private boolean hold;
 
     public Player(String name) {
         this.name = name;
@@ -45,5 +45,13 @@ public class Player {
 
     public void clear() {
         drawnCards = new ArrayList<>();
+    }
+
+    public void hold() {
+        this.hold = hold;
+    }
+
+    public boolean hasHolded() {
+        return this.hold;
     }
 }
